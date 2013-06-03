@@ -5,106 +5,49 @@ namespace CubeCoverLib
 {
     public class Cube : ICube
     {
-        private byte size;
-        public byte Size
-        {
-            get { return size; }
-        }
+        private readonly byte _size;
 
-        private byte power;
-        public byte Power
-        {
-            get
-            {
-                return GetPower(StateSet);
-            }
-            private set
-            {
-                if (power <= Size)
-                {
-                    power = value;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException("power", "Power is excess of size");
-                }
-            }
-        }
-
-        private State[] stateSet;
-        public State[] StateSet
-        {
-            get { return stateSet; }
-        }
+        private readonly State[] _stateSet;
+        private byte _power;
 
         public Cube(byte size)
         {
-            power = 0;
-            stateSet = new State[size];
-            InitSet(stateSet);
+            _power = 0;
+            _stateSet = new State[size];
+            InitSet(_stateSet);
         }
+
         public Cube(State[] stateSet)
         {
-            this.stateSet = stateSet;
-            this.size = (byte)stateSet.Length;
+            _stateSet = stateSet;
+            _size = (byte) stateSet.Length;
         }
 
-
-        public override string ToString()
+        public byte Size
         {
-            return string.Join(",", stateSet.Select(s => StateUtil.GetDescription(s)));
+            get { return _size; }
         }
 
-        private static void InitSet(State[] stateSet)
+        public byte Power
         {
-            for (byte i = 0; i < stateSet.Length; i++)
-            {
-                stateSet[i] = State.F;
-            }
+            get { return GetPower(StateSet); }
         }
 
-        private static byte GetPower(State[] StateSet)
+        public State[] StateSet
         {
-            return (byte)StateSet.Count(s => (s == State.X));
+            get { return _stateSet; }
         }
 
-        private ICube StatewiseMerge(ICube addendCube)
-        {
-            if (addendCube.Size != this.Size || addendCube.Power != this.Power)
-                throw new ArgumentOutOfRangeException("addendCube", "Only cubes with similar params are mergeable");
-
-            ICube resCube = new Cube(this.Size);
-            for (byte i = 0; i < this.Size; i++)
-            {
-                resCube.StateSet[i] = StateUtil.Merge(this.StateSet[i], addendCube.StateSet[i]);
-            }
-            return resCube;
-        }
-
-        private ICube StatewiseIntersection(ICube addendCube)
-        {
-            if (addendCube.Size != this.Size)
-                throw new ArgumentOutOfRangeException("addendCube", "Only cubes with equal sizes are intersectable");
-            else
-            {
-                ICube resCube = new Cube(this.Size);
-                for (byte i = 0; i < this.Size; i++)
-                {
-                    resCube.StateSet[i] = StateUtil.Intersection(this.StateSet[i], addendCube.StateSet[i]);
-                }
-                return resCube;
-            }
-        }
 
         public bool IsNeighbor(ICube neighborCube)
         {
-            if (neighborCube.Size != this.Size || neighborCube.Power != this.Power)
+            if (neighborCube.Size != Size || neighborCube.Power != Power)
             {
                 return false;
             }
             // cubes distinguish by only one coord
-            ICube mergedCube = this.StatewiseMerge(neighborCube);
-            return this.Power + 1 == mergedCube.Power;
+            ICube mergedCube = StatewiseMerge(neighborCube);
+            return Power + 1 == mergedCube.Power;
         }
 
         public ICube Merge(ICube neighbor)
@@ -113,55 +56,25 @@ namespace CubeCoverLib
             {
                 return StatewiseMerge(neighbor);
             }
-            else
-            {
-                throw new ArgumentOutOfRangeException("cubes aren't neighbors");
-            }
+            throw new ArgumentOutOfRangeException("neighbor", "cubes aren't neighbors");
         }
 
         public ICube Intersection(ICube intrsctCube)
         {
-            if (StatewiseIntersection(intrsctCube).IsEmpty())
-                return new EmptyCube();
-            else
-                return StatewiseIntersection(intrsctCube);
+            var isEmpty = StatewiseIntersection(intrsctCube).IsEmpty();
+            return isEmpty ? new EmptyCube() : StatewiseIntersection(intrsctCube);
         }
 
         public bool IsValid()
         {
-            return !Array.Exists(stateSet, (State s) => s == State.Invalid);
+            return !Array.Exists(_stateSet, (State s) => s == State.Invalid);
         }
 
         public bool IsEmpty()
         {
-            return Array.Exists(stateSet, (State s) => s == State.Empty);
+            return Array.Exists(_stateSet, (State s) => s == State.Empty);
         }
 
-        private static bool CompareIsSubset(ICube subCube, ICube superCube)
-        {
-            if (subCube.Size != superCube.Size)
-            {
-                return false;
-            }
-            else
-            {
-                if (superCube.Power <= subCube.Power)
-                {
-                    return false;
-                }
-                else
-                {
-                    for (byte i = 0; i < subCube.Size; i++)
-                    {
-                        if (!StateUtil.IsSubset(subCube.StateSet[i], superCube.StateSet[i]))
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            }
-        }
         public bool IsSubcube(ICube superCube)
         {
             return CompareIsSubset(this, superCube);
@@ -178,6 +91,65 @@ namespace CubeCoverLib
             throw new NotImplementedException();
         }
 
+        public override string ToString()
+        {
+            return string.Join(",", _stateSet.Select(s => StateUtil.GetDescription(s)));
+        }
+
+        private static void InitSet(State[] stateSet)
+        {
+            for (byte i = 0; i < stateSet.Length; i++)
+            {
+                stateSet[i] = State.F;
+            }
+        }
+
+        private static byte GetPower(State[] stateSet)
+        {
+            return (byte) stateSet.Count(s => (s == State.X));
+        }
+
+        private ICube StatewiseMerge(ICube addendCube)
+        {
+            if (addendCube.Size != Size || addendCube.Power != Power)
+                throw new ArgumentOutOfRangeException("addendCube", "Only cubes with similar params are mergeable");
+
+            ICube resCube = new Cube(Size);
+            for (byte i = 0; i < Size; i++)
+            {
+                resCube.StateSet[i] = StateUtil.Merge(StateSet[i], addendCube.StateSet[i]);
+            }
+            return resCube;
+        }
+
+        private ICube StatewiseIntersection(ICube addendCube)
+        {
+            if (addendCube.Size != Size)
+                throw new ArgumentOutOfRangeException("addendCube", "Only cubes with equal sizes are intersectable");
+            ICube resCube = new Cube(Size);
+            for (byte i = 0; i < Size; i++)
+            {
+                resCube.StateSet[i] = StateUtil.Intersection(StateSet[i], addendCube.StateSet[i]);
+            }
+            return resCube;
+        }
+
+        private static bool CompareIsSubset(ICube subCube, ICube superCube)
+        {
+            if (subCube.Size != superCube.Size || superCube.Power <= subCube.Power)
+            {
+                return false;
+            }
+            for (byte i = 0; i < subCube.Size; i++)
+            {
+                if (!StateUtil.IsSubset(subCube.StateSet[i], superCube.StateSet[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -185,13 +157,13 @@ namespace CubeCoverLib
                 return false;
             }
 
-            Cube p = obj as Cube;
-            if ((System.Object)p == null)
+            var p = obj as Cube;
+            if (p == null)
             {
                 return false;
             }
 
-            return stateSet.SequenceEqual(p.StateSet);
+            return _stateSet.SequenceEqual(p.StateSet);
 
             //if (p.Size == this.size && p.Power == this.power)
             //{
@@ -209,20 +181,15 @@ namespace CubeCoverLib
 
         public bool Equals(Cube p)
         {
-            if ((object)p == null)
-            {
-                return false;
-            }
-
-            return stateSet.SequenceEqual(p.StateSet);
+            return p != null && _stateSet.SequenceEqual(p.StateSet);
         }
 
         public override int GetHashCode()
         {
-            int hc = 0;
-            for (byte i = 0; i < size; i++)
+            var hc = 0;
+            for (byte i = 0; i < _size; i++)
             {
-                hc += stateSet[i].GetHashCode();
+                hc += _stateSet[i].GetHashCode();
             }
             return hc;
         }

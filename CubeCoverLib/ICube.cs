@@ -1,5 +1,4 @@
-﻿
-namespace CubeCoverLib
+﻿namespace CubeCoverLib
 {
     public interface ICube
     {

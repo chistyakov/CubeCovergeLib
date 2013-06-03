@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CubeCoverLib
 {
-    class EmptyCube : ICube
+    internal class EmptyCube : ICube
     {
         public byte Size
         {
@@ -48,11 +44,6 @@ namespace CubeCoverLib
             return true;
         }
 
-        public override string ToString()
-        {
-            return "empty cube";
-        }
-
 
         public bool IsSubcube(ICube superCube)
         {
@@ -68,6 +59,11 @@ namespace CubeCoverLib
         public ICube[] Subtract(ICube subCube)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return "empty cube";
         }
     }
 }
