@@ -185,7 +185,6 @@ namespace CubeCoverLib
                 return false;
             }
 
-            // If parameter cannot be cast to Point return false.
             Cube p = obj as Cube;
             if ((System.Object)p == null)
             {
