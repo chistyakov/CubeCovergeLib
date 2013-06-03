@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CubeCoverLib
 {
-    public interface Coverage
+    public interface ICoverage
     {
         Cube[] CubeSet { get; }
 

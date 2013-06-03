@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Coverage.cs" />
+    <Compile Include="ICoverage.cs" />
     <Compile Include="Cube.cs" />
     <Compile Include="EmptyCube.cs" />
     <Compile Include="ICube.cs" />

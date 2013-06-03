@@ -151,7 +151,7 @@ namespace CubeCoverLib
         //    }
         //}
 
-        public Coverage GetNullCoverage()
+        public ICoverage GetNullCoverage()
         {
             throw new NotImplementedException();
         }

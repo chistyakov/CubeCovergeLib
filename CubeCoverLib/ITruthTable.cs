@@ -10,7 +10,7 @@ namespace CubeCoverLib
     {
         bool[,] Table { set; get; }
         byte ArgCount { get; }
-        Coverage GetNullCoverage();
+        ICoverage GetNullCoverage();
         void Sort();
     }
 }
