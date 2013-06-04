@@ -4,7 +4,8 @@
     {
         bool[,] Table { set; get; }
         byte ArgCount { get; }
-        ICoverage GetNullCoverage();
+        ICube[] GetNullCoverage();
         void Sort();
+        string ToString();
     }
 }

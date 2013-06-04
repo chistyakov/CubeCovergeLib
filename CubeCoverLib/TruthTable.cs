@@ -54,7 +54,7 @@ namespace CubeCoverLib
             set { _table = value; }
         }
 
-        public ICoverage GetNullCoverage()
+        public ICube[] GetNullCoverage()
         {
             throw new NotImplementedException();
         }
