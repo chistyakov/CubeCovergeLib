@@ -7,15 +7,15 @@ namespace CubeCoverLib
     {
         private readonly byte _size;
 
-        private readonly State2[] _stateSet;
+        private readonly State[] _stateSet;
 
         public Cube(byte size)
         {
-            _stateSet = new State2[size];
+            _stateSet = new State[size];
             InitSet(_stateSet);
         }
 
-        public Cube(State2[] stateSet)
+        public Cube(State[] stateSet)
         {
             _stateSet = stateSet;
             _size = (byte)stateSet.Length;
@@ -31,7 +31,7 @@ namespace CubeCoverLib
             get { return GetPower(_stateSet); }
         }
 
-        public State2 this[byte index]
+        public State this[byte index]
         {
             get { return _stateSet[index]; }
         }
@@ -90,24 +90,24 @@ namespace CubeCoverLib
             return string.Join(",", _stateSet.Select(s => s.ToString()));
         }
 
-        private static void InitSet(State2[] stateSet)
+        private static void InitSet(State[] stateSet)
         {
             for (byte i = 0; i < stateSet.Length; i++)
             {
-                stateSet[i] = State2.F;
+                stateSet[i] = State.F;
             }
         }
 
-        private static byte GetPower(State2[] stateSet)
+        private static byte GetPower(State[] stateSet)
         {
-            return (byte)stateSet.Count(s => (s.Equals(State2.X)));
+            return (byte)stateSet.Count(s => (s.Equals(State.X)));
         }
 
         private ICube StatewiseMerge(ICube addendCube)
         {
             if (addendCube.Size != Size || addendCube.Power != Power)
                 throw new ArgumentOutOfRangeException("addendCube", "Only cubes with similar params are mergeable");
-            var tempStateSet = new State2[Size];
+            var tempStateSet = new State[Size];
             for (byte i = 0; i < Size; i++)
             {
                 tempStateSet[i] = _stateSet[i].Intersection(addendCube[i]);
@@ -119,7 +119,7 @@ namespace CubeCoverLib
         {
             if (addendCube.Size != Size)
                 throw new ArgumentOutOfRangeException("addendCube", "Only cubes with equal sizes are intersectable");
-            var tempStateSet = new State2[Size];
+            var tempStateSet = new State[Size];
             for (byte i = 0; i < Size; i++)
             {
                 tempStateSet[i] = _stateSet[i].Intersection(addendCube[i]);

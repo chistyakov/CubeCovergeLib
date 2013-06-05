@@ -4,7 +4,7 @@
     {
         byte Size { get; }
         byte Power { get; }
-        State2 this[byte index] { get; }
+        State this[byte index] { get; }
         ICube Merge(ICube neighborCube);
         ICube Intersection(ICube intrsctCube);
         bool IsNeighbor(ICube neighborCube);

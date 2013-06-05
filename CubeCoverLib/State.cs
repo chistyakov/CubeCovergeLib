@@ -2,19 +2,19 @@
 
 namespace CubeCoverLib
 {
-    public struct State2
+    public struct State
     {
         // The three possible State values.
-        public static readonly State2 F = new State2(0);
-        public static readonly State2 T = new State2(1);
-        public static readonly State2 X = new State2(2);
+        public static readonly State F = new State(0);
+        public static readonly State T = new State(1);
+        public static readonly State X = new State(2);
 
-        private static readonly State2 Empty = new State2(-1);
+        private static readonly State Empty = new State(-1);
 
         // Private field that stores 0, 1, 2, -1 for F, T, X, Empty.
         readonly sbyte _value;
         // Private instance constructor. The value parameter must be 0, 1 or 2.
-        State2(int value)
+        State(int value)
         {
             _value = (sbyte)value;
         }
@@ -24,8 +24,8 @@ namespace CubeCoverLib
 
         public override bool Equals(object obj)
         {
-            if (!(obj is State2)) return false;
-            return _value == ((State2)obj)._value;
+            if (!(obj is State)) return false;
+            return _value == ((State)obj)._value;
         }
         public override int GetHashCode()
         {
@@ -38,7 +38,7 @@ namespace CubeCoverLib
             return "x";
         }
 
-        private static readonly State2[,] MergeTable =
+        private static readonly State[,] MergeTable =
             {
                 // F,   T,      X 
                 {F,     X,      Empty}, // F
@@ -46,7 +46,7 @@ namespace CubeCoverLib
                 {Empty, Empty,  X}      // X
             };
 
-        private static readonly State2[,] IntersectTable =
+        private static readonly State[,] IntersectTable =
             {
                 // F,   T,      X 
                 {F,     Empty,  F},     // F
@@ -62,7 +62,7 @@ namespace CubeCoverLib
                 {false, false,  true}   // X
             };
 
-        public State2 Merge(State2 s2)
+        public State Merge(State s2)
         {
             var res = MergeTable[_value, s2._value];
             if (res.Equals(Empty))
@@ -70,7 +70,7 @@ namespace CubeCoverLib
             return res;
         }
 
-        public State2 Intersection(State2 s2)
+        public State Intersection(State s2)
         {
             var res = IntersectTable[_value, s2._value];
             if (res.Equals(Empty))
@@ -78,7 +78,7 @@ namespace CubeCoverLib
             return res;
         }
 
-        public bool IsSubstate(State2 superS)
+        public bool IsSubstate(State superS)
         {
             return SubsetTable[_value, superS._value];
         }

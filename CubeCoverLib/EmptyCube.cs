@@ -14,7 +14,7 @@ namespace CubeCoverLib
             get { return 0; }
         }
 
-        public State2[] StateSet
+        public State[] StateSet
         {
             get { return null; }
         }
@@ -67,7 +67,7 @@ namespace CubeCoverLib
         }
 
 
-        public State2 this[byte index]
+        public State this[byte index]
         {
             get { throw new IndexOutOfRangeException(); }
         }
