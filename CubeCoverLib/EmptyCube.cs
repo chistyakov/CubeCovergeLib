@@ -14,7 +14,7 @@ namespace CubeCoverLib
             get { return 0; }
         }
 
-        public State[] StateSet
+        public State2[] StateSet
         {
             get { return null; }
         }

@@ -7,17 +7,15 @@ namespace CubeCoverLib
     {
         private readonly byte _size;
 
-        private readonly State[] _stateSet;
-        private byte _power;
+        private readonly State2[] _stateSet;
 
         public Cube(byte size)
         {
-            _power = 0;
-            _stateSet = new State[size];
+            _stateSet = new State2[size];
             InitSet(_stateSet);
         }
 
-        public Cube(State[] stateSet)
+        public Cube(State2[] stateSet)
         {
             _stateSet = stateSet;
             _size = (byte) stateSet.Length;
@@ -33,7 +31,7 @@ namespace CubeCoverLib
             get { return GetPower(StateSet); }
         }
 
-        public State[] StateSet
+        public State2[] StateSet
         {
             get { return _stateSet; }
         }
@@ -61,19 +59,25 @@ namespace CubeCoverLib
 
         public ICube Intersection(ICube intrsctCube)
         {
-            var isEmpty = StatewiseIntersection(intrsctCube).IsEmpty();
-            return isEmpty ? new EmptyCube() : StatewiseIntersection(intrsctCube);
+            try
+            {
+                return StatewiseIntersection(intrsctCube);
+            }
+            catch (InvalidOperationException)
+            {
+                return new EmptyCube();
+            }
         }
 
-        public bool IsValid()
-        {
-            return !Array.Exists(_stateSet, (State s) => s == State.Invalid);
-        }
+        //public bool IsValid()
+        //{
+        //    return !Array.Exists(_stateSet, (State2 s) => s == State2.Invalid);
+        //}
 
-        public bool IsEmpty()
-        {
-            return Array.Exists(_stateSet, (State s) => s == State.Empty);
-        }
+        //public bool IsEmpty()
+        //{
+        //    return Array.Exists(_stateSet, (State s2) => s == State2.Empty);
+        //}
 
         public bool IsSubcube(ICube superCube)
         {
@@ -93,20 +97,20 @@ namespace CubeCoverLib
 
         public override string ToString()
         {
-            return string.Join(",", _stateSet.Select(s => StateUtil.GetDescription(s)));
+            return string.Join(",", _stateSet.Select(s => s.ToString()));
         }
 
-        private static void InitSet(State[] stateSet)
+        private static void InitSet(State2[] stateSet)
         {
             for (byte i = 0; i < stateSet.Length; i++)
             {
-                stateSet[i] = State.F;
+                stateSet[i] = State2.F;
             }
         }
 
-        private static byte GetPower(State[] stateSet)
+        private static byte GetPower(State2[] stateSet)
         {
-            return (byte) stateSet.Count(s => (s == State.X));
+            return (byte) stateSet.Count(s => (s.Equals(State2.X)));
         }
 
         private ICube StatewiseMerge(ICube addendCube)
@@ -117,7 +121,7 @@ namespace CubeCoverLib
             ICube resCube = new Cube(Size);
             for (byte i = 0; i < Size; i++)
             {
-                resCube.StateSet[i] = StateUtil.Merge(StateSet[i], addendCube.StateSet[i]);
+                resCube.StateSet[i] = StateSet[i].Merge(addendCube.StateSet[i]);
             }
             return resCube;
         }
@@ -129,7 +133,7 @@ namespace CubeCoverLib
             ICube resCube = new Cube(Size);
             for (byte i = 0; i < Size; i++)
             {
-                resCube.StateSet[i] = StateUtil.Intersection(StateSet[i], addendCube.StateSet[i]);
+                resCube.StateSet[i] = StateSet[i].Intersection(addendCube.StateSet[i]);
             }
             return resCube;
         }
@@ -142,7 +146,7 @@ namespace CubeCoverLib
             }
             for (byte i = 0; i < subCube.Size; i++)
             {
-                if (!StateUtil.IsSubset(subCube.StateSet[i], superCube.StateSet[i]))
+                if (!subCube.StateSet[i].IsSubstate(superCube.StateSet[i]))
                 {
                     return false;
                 }

@@ -46,6 +46,11 @@ namespace CubeCoverLib
             }
         }
 
+        public TruthTable(byte argNum, byte[] funcVal, bool funcValsDefTrue)
+        {
+            throw  new  NotImplementedException();
+        }
+
         public byte ArgCount { get; private set; }
 
         public bool[,] Table
@@ -93,7 +98,7 @@ namespace CubeCoverLib
             return colCount == (pow + 1);
         }
 
-        private bool CheckTableContent(bool[,] table)
+        private static bool CheckTableContent(bool[,] table)
         {
             var rowCount = (byte) table.GetLength(0);
             var colCount = (byte) table.GetLength(1);

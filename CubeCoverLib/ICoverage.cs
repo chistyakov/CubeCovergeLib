@@ -2,6 +2,9 @@
 {
     public interface ICoverage
     {
-        Cube[] CubeSet { get; }
+        ICube[] CubeSet { get; }
+        ICube[] Intersection(ICoverage intrsctCov);
+        ICube[] Subtract(ICoverage subCov);
+        ICube[] GetCubesByPow(byte pow);
     }
 }
