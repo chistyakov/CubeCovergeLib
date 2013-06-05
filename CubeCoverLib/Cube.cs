@@ -18,7 +18,7 @@ namespace CubeCoverLib
         public Cube(State2[] stateSet)
         {
             _stateSet = stateSet;
-            _size = (byte) stateSet.Length;
+            _size = (byte)stateSet.Length;
         }
 
         public byte Size
@@ -28,12 +28,12 @@ namespace CubeCoverLib
 
         public byte Power
         {
-            get { return GetPower(StateSet); }
+            get { return GetPower(_stateSet); }
         }
 
-        public State2[] StateSet
+        public State2 this[int index]
         {
-            get { return _stateSet; }
+            get { return _stateSet[index]; }
         }
 
 
@@ -44,7 +44,7 @@ namespace CubeCoverLib
                 return false;
             }
             // cubes distinguish by only one coord
-            ICube mergedCube = StatewiseMerge(neighborCube);
+            var mergedCube = StatewiseMerge(neighborCube);
             return Power + 1 == mergedCube.Power;
         }
 
@@ -68,16 +68,6 @@ namespace CubeCoverLib
                 return new EmptyCube();
             }
         }
-
-        //public bool IsValid()
-        //{
-        //    return !Array.Exists(_stateSet, (State2 s) => s == State2.Invalid);
-        //}
-
-        //public bool IsEmpty()
-        //{
-        //    return Array.Exists(_stateSet, (State s2) => s == State2.Empty);
-        //}
 
         public bool IsSubcube(ICube superCube)
         {
@@ -110,32 +100,31 @@ namespace CubeCoverLib
 
         private static byte GetPower(State2[] stateSet)
         {
-            return (byte) stateSet.Count(s => (s.Equals(State2.X)));
+            return (byte)stateSet.Count(s => (s.Equals(State2.X)));
         }
 
         private ICube StatewiseMerge(ICube addendCube)
         {
             if (addendCube.Size != Size || addendCube.Power != Power)
                 throw new ArgumentOutOfRangeException("addendCube", "Only cubes with similar params are mergeable");
-
-            ICube resCube = new Cube(Size);
+            var tempStateSet = new State2[Size];
             for (byte i = 0; i < Size; i++)
             {
-                resCube.StateSet[i] = StateSet[i].Merge(addendCube.StateSet[i]);
+                tempStateSet[i] = _stateSet[i].Intersection(addendCube[i]);
             }
-            return resCube;
+            return new Cube(tempStateSet);
         }
 
         private ICube StatewiseIntersection(ICube addendCube)
         {
             if (addendCube.Size != Size)
                 throw new ArgumentOutOfRangeException("addendCube", "Only cubes with equal sizes are intersectable");
-            ICube resCube = new Cube(Size);
+            var tempStateSet = new State2[Size];
             for (byte i = 0; i < Size; i++)
             {
-                resCube.StateSet[i] = StateSet[i].Intersection(addendCube.StateSet[i]);
+                tempStateSet[i] = _stateSet[i].Intersection(addendCube[i]);
             }
-            return resCube;
+            return new Cube(tempStateSet);
         }
 
         private static bool CompareIsSubset(ICube subCube, ICube superCube)
@@ -146,7 +135,7 @@ namespace CubeCoverLib
             }
             for (byte i = 0; i < subCube.Size; i++)
             {
-                if (!subCube.StateSet[i].IsSubstate(superCube.StateSet[i]))
+                if (!subCube[i].IsSubstate(superCube[i]))
                 {
                     return false;
                 }
@@ -167,25 +156,36 @@ namespace CubeCoverLib
                 return false;
             }
 
-            return _stateSet.SequenceEqual(p.StateSet);
-
-            //if (p.Size == this.size && p.Power == this.power)
-            //{
-            //    for (byte i = 0; i < this.Size; i++)
-            //    {
-            //        if (this.StateSet[i] != p.StateSet[i])
-            //        {
-            //            return false;
-            //        }
-            //    }
-            //    return true;
-            //}
-            //return false;
+            if (p.Size == _size && p.Power == Power)
+            {
+                for (byte i = 0; i < _size; i++)
+                {
+                    if (!_stateSet[i].Equals(p[i]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         public bool Equals(Cube p)
         {
-            return p != null && _stateSet.SequenceEqual(p.StateSet);
+            if (p == null)
+                return true;
+            if (p.Size == _size && p.Power == Power)
+            {
+                for (byte i = 0; i < _size; i++)
+                {
+                    if (!_stateSet[i].Equals(p[i]))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

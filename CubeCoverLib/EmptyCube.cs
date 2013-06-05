@@ -65,5 +65,11 @@ namespace CubeCoverLib
         {
             return "empty cube";
         }
+
+
+        public State2 this[int index]
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
