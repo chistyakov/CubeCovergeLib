@@ -31,7 +31,7 @@ namespace CubeCoverLib
             get { return GetPower(_stateSet); }
         }
 
-        public State2 this[int index]
+        public State2 this[byte index]
         {
             get { return _stateSet[index]; }
         }

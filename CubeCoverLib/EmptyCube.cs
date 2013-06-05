@@ -67,9 +67,9 @@ namespace CubeCoverLib
         }
 
 
-        public State2 this[int index]
+        public State2 this[byte index]
         {
-            get { throw new NotImplementedException(); }
+            get { throw new IndexOutOfRangeException(); }
         }
     }
 }

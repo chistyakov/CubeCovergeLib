@@ -2,7 +2,8 @@
 {
     public interface ITruthTable
     {
-        bool[,] Table { set; get; }
+
+        bool this [byte index1, byte index2] { get; }
         byte ArgCount { get; }
         ICube[] GetNullCoverage();
         void Sort();

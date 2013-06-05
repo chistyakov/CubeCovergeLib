@@ -8,7 +8,7 @@ namespace CubeCoverLib
     {
         private const byte NotFound = 0xff;
         private const byte WordSize = 8;
-        private bool[,] _table;
+        private readonly bool[,] _table;
 
         public TruthTable(bool[,] table)
         {
@@ -23,41 +23,35 @@ namespace CubeCoverLib
             if (!CheckTableContent(table))
                 throw new ArgumentOutOfRangeException("table",
                                                       "wrong set of arguments. Function should be defined once for every set of arguments");
-            Table = table;
+            _table = table;
             ArgCount = pow;
         }
 
         public TruthTable(byte argNum, bool[] funcVal)
         {
             var rowCount = RaiseTwoToXPow(argNum);
-            var colCount = (byte) (argNum + 1);
+            var colCount = (byte)(argNum + 1);
             if (rowCount != funcVal.Length)
                 throw new ArgumentOutOfRangeException(
                     string.Format(
                         "the size of array of function's values = {0}. Expected size (based on the number of arguments) = {1}",
                         funcVal.Length, rowCount));
-            Table = new bool[rowCount,colCount];
+            _table = new bool[rowCount, colCount];
             ArgCount = argNum;
 
             for (byte i = 0x00; i < rowCount; i++)
             {
                 ReplaceRowWithWord(ref _table, i, i, 1);
-                Table[i, colCount - 1] = funcVal[i];
+                _table[i, colCount - 1] = funcVal[i];
             }
         }
 
         public TruthTable(byte argNum, byte[] funcVal, bool funcValsDefTrue)
         {
-            throw  new  NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public byte ArgCount { get; private set; }
-
-        public bool[,] Table
-        {
-            get { return _table; }
-            set { _table = value; }
-        }
 
         public ICube[] GetNullCoverage()
         {
@@ -84,13 +78,13 @@ namespace CubeCoverLib
         private static byte RaiseTwoToXPow(byte x)
         {
             const byte res = 0x01;
-            return (byte) (res << x);
+            return (byte)(res << x);
         }
 
         private static bool CheckTableDims(bool[,] table, out byte rowCount, out byte colCount, out byte pow)
         {
-            rowCount = (byte) table.GetLength(0);
-            colCount = (byte) table.GetLength(1);
+            rowCount = (byte)table.GetLength(0);
+            colCount = (byte)table.GetLength(1);
             if (!IsPowerOfTwo(rowCount, out pow))
             {
                 return false;
@@ -100,8 +94,8 @@ namespace CubeCoverLib
 
         private static bool CheckTableContent(bool[,] table)
         {
-            var rowCount = (byte) table.GetLength(0);
-            var colCount = (byte) table.GetLength(1);
+            var rowCount = (byte)table.GetLength(0);
+            var colCount = (byte)table.GetLength(1);
             for (byte i = 0x00; i < rowCount; i++)
             {
                 var pattern = ConvertToBoolArray(i).Take(colCount - 1).ToArray();
@@ -114,8 +108,8 @@ namespace CubeCoverLib
 
         private static byte SearchPerRows(bool[,] table, bool[] pattern)
         {
-            var rowCount = (byte) table.GetLength(0);
-            var colCount = (byte) table.GetLength(1);
+            var rowCount = (byte)table.GetLength(0);
+            var colCount = (byte)table.GetLength(1);
             if ((colCount - 1) != pattern.Length)
             {
                 throw new ArgumentOutOfRangeException(
@@ -163,17 +157,17 @@ namespace CubeCoverLib
 
         public override string ToString()
         {
-            var rowCount = (byte) Table.GetLength(0);
-            var colCount = (byte) Table.GetLength(1);
+            var rowCount = (byte)_table.GetLength(0);
+            var colCount = (byte)_table.GetLength(1);
             var retStr = new StringBuilder();
             for (byte i = 0; i < rowCount; i++)
             {
                 for (byte j = 0; j < colCount - 1; j++)
                 {
-                    retStr.Append(Table[i, j] ? '1' : '0');
+                    retStr.Append(_table[i, j] ? '1' : '0');
                 }
                 retStr.Append("|");
-                bool lastElemInLine = Table[i, colCount - 1];
+                bool lastElemInLine = _table[i, colCount - 1];
                 retStr.Append(lastElemInLine ? '1' : '0');
                 retStr.Append("\n");
             }
@@ -185,10 +179,20 @@ namespace CubeCoverLib
                                                byte shiftWordLeft = 0)
         {
             var wordByteSet = ConvertToBoolArray(word);
-            var colCount = (byte) table.GetLength(1);
+            var colCount = (byte)table.GetLength(1);
             for (byte i = 0; i < colCount - shiftWordLeft; i++)
             {
                 table[rowNum, colCount - 1 - i - shiftWordLeft] = wordByteSet[i];
+            }
+        }
+
+        public bool this[byte index1, byte index2]
+        {
+            get
+            {
+                if (index1 < RaiseTwoToXPow(ArgCount) && index1 < ArgCount + 1)
+                    return _table[index1, index2];
+                throw new IndexOutOfRangeException();
             }
         }
     }
