@@ -5,8 +5,6 @@ namespace CubeCoverLib
 {
     public class Cube : ICube
     {
-        private readonly byte _size;
-
         private readonly State[] _stateSet;
 
         public Cube(byte size)
@@ -18,12 +16,11 @@ namespace CubeCoverLib
         public Cube(State[] stateSet)
         {
             _stateSet = stateSet;
-            _size = (byte)stateSet.Length;
         }
 
         public byte Size
         {
-            get { return _size; }
+            get { return (byte)_stateSet.Length; }
         }
 
         public byte Power
@@ -156,9 +153,9 @@ namespace CubeCoverLib
                 return false;
             }
 
-            if (p.Size == _size && p.Power == Power)
+            if (p.Size == Size && p.Power == Power)
             {
-                for (byte i = 0; i < _size; i++)
+                for (byte i = 0; i < Size; i++)
                 {
                     if (!_stateSet[i].Equals(p[i]))
                     {
@@ -174,9 +171,9 @@ namespace CubeCoverLib
         {
             if (p == null)
                 return true;
-            if (p.Size == _size && p.Power == Power)
+            if (p.Size == Size && p.Power == Power)
             {
-                for (byte i = 0; i < _size; i++)
+                for (byte i = 0; i < Size; i++)
                 {
                     if (!_stateSet[i].Equals(p[i]))
                     {
@@ -191,7 +188,7 @@ namespace CubeCoverLib
         public override int GetHashCode()
         {
             var hc = 0;
-            for (byte i = 0; i < _size; i++)
+            for (byte i = 0; i < Size; i++)
             {
                 hc += _stateSet[i].GetHashCode();
             }

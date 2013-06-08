@@ -14,11 +14,6 @@ namespace CubeCoverLib
             get { return 0; }
         }
 
-        public State[] StateSet
-        {
-            get { return null; }
-        }
-
         public ICube Merge(ICube neighborCube)
         {
             return this;
@@ -34,17 +29,6 @@ namespace CubeCoverLib
             return false;
         }
 
-        public bool IsValid()
-        {
-            return true;
-        }
-
-        public bool IsEmpty()
-        {
-            return true;
-        }
-
-
         public bool IsSubcube(ICube superCube)
         {
             return true;
@@ -52,9 +36,8 @@ namespace CubeCoverLib
 
         public bool IsSupercube(ICube subCube)
         {
-            return false;
+            return subCube.GetType() == typeof(EmptyCube);
         }
-
 
         public ICube[] Subtract(ICube subCube)
         {

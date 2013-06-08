@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CubeCoverLib.Coverage" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAgAAACAECAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Coverage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CubeCoverLib.Cube" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoAAQAgBAAgAAEiAACAABAAAAQAYABAAAAABIAAAQ=</HashCode>
+      <FileName>Cube.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CubeCoverLib.CubesComplex" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIA=</HashCode>
+      <FileName>CubesComplex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CubeCoverLib.EmptyCube" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAgAAECAACAABAAAAQAQABAAAAAAAAAAQ=</HashCode>
+      <FileName>EmptyCube.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="CubeCoverLib.TruthTable" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAABQAAAAAAgAECAEQAQAAAAgAAAAYBAEAAAAIAAA=</HashCode>
+      <FileName>TruthTable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Struct Name="CubeCoverLib.State" Collapsed="true">
+    <Position X="3" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFAAAAAAAAAAQAgEgAYAAABAAABAAYAAAABCEAAEQAA=</HashCode>
+      <FileName>State.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="CubeCoverLib.ICoverage" Collapsed="true">
+    <Position X="3" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAgAAECAECAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ICoverage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CubeCoverLib.ICube" Collapsed="true">
+    <Position X="4.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAgAAECAACAABAAAAQAQABAAAAAAAAAAQ=</HashCode>
+      <FileName>ICube.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CubeCoverLib.ITruthTable" Collapsed="true">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAECAAQAAAAAAgAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>ITruthTable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

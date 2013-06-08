@@ -1,19 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CubeCoverLib
 {
-    internal class Coverage : ICoverage
+    class EmptyCoverage : ICoverage
     {
-        private readonly ICube[] _cubes;
-
-        public Coverage() {}
-
-        public Coverage(ICube[] cubes)
-        {
-            _cubes = cubes;
-        }
-
         public ICube this[byte index]
         {
             get { throw new NotImplementedException(); }
@@ -21,7 +15,7 @@ namespace CubeCoverLib
 
         public byte Size
         {
-            get { return (byte) _cubes.Length; }
+            get { throw new NotImplementedException(); }
         }
 
         public byte MaxPower
@@ -41,18 +35,13 @@ namespace CubeCoverLib
 
         public ICube[] GetCubesByPow(byte pow)
         {
-            if (Size == 0)
-            {
-                return (new EmptyCoverage()).ToCubesArray();
-            }
-
-            return _cubes.Where(s => s.Power == pow).ToArray();
+            throw new NotImplementedException();
         }
 
 
         public ICube[] ToCubesArray()
         {
-            return _cubes;
+            throw new NotImplementedException();
         }
     }
 }
