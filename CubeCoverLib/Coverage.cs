@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace CubeCoverLib
 {
-    internal class Coverage : ICoverage
+    class Coverage : ICoverage
     {
         private readonly ICube[] _cubes;
 
