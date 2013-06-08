@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace CubeCoverLib
 {
-    class Coverage : ICoverage
+    public class Coverage : ICoverage
     {
         private readonly ICube[] _cubes;
 
@@ -16,7 +16,11 @@ namespace CubeCoverLib
 
         public ICube this[byte index]
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                if (index >= Size) throw new IndexOutOfRangeException();
+                return _cubes[index];
+            }
         }
 
         public byte Size
@@ -26,12 +30,17 @@ namespace CubeCoverLib
 
         public byte MaxPower
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                return _cubes.Max(s => s.Power);
+            }
         }
 
         public ICube[] Intersection(ICoverage intrsctCov)
         {
-            throw new NotImplementedException();
+            //if(Size!=intrsctCov.Size)
+            //    throw new ArgumentException();
+            return  _cubes.Intersect(intrsctCov.ToCubesArray()).ToArray();
         }
 
         public ICube[] Subtract(ICoverage subCov)
@@ -53,6 +62,11 @@ namespace CubeCoverLib
         public ICube[] ToCubesArray()
         {
             return _cubes;
+        }
+
+        public override string ToString()
+        {
+            return string.Join("\n", _cubes.Select(s => s.ToString()));
         }
     }
 }
