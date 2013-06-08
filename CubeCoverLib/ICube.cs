@@ -2,7 +2,7 @@
 {
     public interface ICube
     {
-        byte Size { get; }
+        byte Bitness { get; }
         byte Power { get; }
         State this[byte index] { get; }
         ICube Merge(ICube neighborCube);

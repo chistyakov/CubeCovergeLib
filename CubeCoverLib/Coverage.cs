@@ -1,18 +1,30 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 
 namespace CubeCoverLib
 {
     public class Coverage : ICoverage
     {
-        protected ICube[] _cubes;
+        private ICube[] _cubes;
 
-        public Coverage() {}
+        public Coverage()
+        {
+        }
 
         public Coverage(ICube[] cubes)
         {
-            _cubes = (ICube[]) cubes.Clone();
+            Cubes = cubes;
+        }
+
+        protected ICube[] Cubes
+        {
+            get { return _cubes; }
+            set
+            {
+                if (!CheckBitness(value))
+                    throw new ArgumentException();
+                _cubes = value;
+            }
         }
 
         public ICube this[byte index]
@@ -20,33 +32,32 @@ namespace CubeCoverLib
             get
             {
                 if (index >= Size) throw new IndexOutOfRangeException();
-                return _cubes[index];
+                return Cubes[index];
             }
         }
 
         public byte Size
         {
-            get { return (byte) _cubes.Length; }
+            get { return (byte) Cubes.Length; }
         }
 
         public byte MaxPower
         {
-            get
-            {
-                return _cubes.Max(s => s.Power);
-            }
+            get { return Cubes.Max(s => s.Power); }
         }
 
         public ICube[] Intersection(ICoverage intrsctCov)
         {
-            //if(Size!=intrsctCov.Size)
-            //    throw new ArgumentException();
-            return  _cubes.Intersect(intrsctCov.ToCubesArray()).ToArray();
+            if (Bitness != intrsctCov.Bitness)
+                throw new ArgumentException();
+            return Cubes.Intersect(intrsctCov.ToCubesArray()).ToArray();
         }
 
-        public ICube[] Subtract(ICoverage subCov)
+        public ICube[] Except(ICoverage excptCov)
         {
-            throw new NotImplementedException();
+            if (Bitness != excptCov.Bitness)
+                throw new ArgumentException();
+            return Cubes.Except(excptCov.ToCubesArray()).ToArray();
         }
 
         public ICube[] GetCubesByPow(byte pow)
@@ -56,19 +67,68 @@ namespace CubeCoverLib
                 return (new EmptyCoverage()).ToCubesArray();
             }
 
-            return _cubes.Where(s => s.Power == pow).ToArray();
+            return Cubes.Where(s => s.Power == pow).ToArray();
         }
 
 
         public ICube[] ToCubesArray()
         {
-            return _cubes;
+            return (ICube[]) Cubes.Clone();
         }
 
         public override string ToString()
         {
-            //if (_cubes == null) return "null";
-            return string.Join("\n", _cubes.Select(s => s.ToString()));
+            if (Cubes == null) return (new EmptyCoverage().ToString());
+            return string.Join("\n", Cubes.Select(s => s.ToString()));
+        }
+
+        public bool Contains(ICube contCube)
+        {
+            return contCube.Bitness == Bitness && Cubes.Contains(contCube);
+        }
+
+        public byte Bitness
+        {
+            get { return Cubes[0].Bitness; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            var p = obj as Coverage;
+            if (p == null)
+            {
+                return false;
+            }
+
+            return (p.Size == Size && Intersection(p).Length == Size);
+        }
+
+        public bool Equals(ICoverage coverage)
+        {
+            return (coverage.Bitness == Bitness &&
+                    coverage.Size == Size &&
+                    Intersection(coverage).Length == Size);
+        }
+
+        public override int GetHashCode()
+        {
+            int hc = 0;
+            for (byte i = 0; i < Size; i++)
+            {
+                hc += Cubes[i].GetHashCode();
+            }
+            return hc;
+        }
+
+        private static bool CheckBitness(ICube[] cubes)
+        {
+            byte bitness = cubes[0].Bitness;
+            return cubes.All(s => s.Bitness == bitness);
         }
     }
 }

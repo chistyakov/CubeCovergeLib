@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CubeCoverLib
 {
-    class EmptyCoverage : ICoverage
+    internal class EmptyCoverage : ICoverage
     {
         public ICube this[byte index]
         {
@@ -28,7 +24,7 @@ namespace CubeCoverLib
             throw new NotImplementedException();
         }
 
-        public ICube[] Subtract(ICoverage subCov)
+        public ICube[] Except(ICoverage subCov)
         {
             throw new NotImplementedException();
         }
@@ -40,6 +36,17 @@ namespace CubeCoverLib
 
 
         public ICube[] ToCubesArray()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public byte Bitness
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public bool Contains(ICube contCube)
         {
             throw new NotImplementedException();
         }

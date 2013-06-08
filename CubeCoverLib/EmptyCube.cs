@@ -4,7 +4,7 @@ namespace CubeCoverLib
 {
     internal class EmptyCube : ICube
     {
-        public byte Size
+        public byte Bitness
         {
             get { return 0; }
         }

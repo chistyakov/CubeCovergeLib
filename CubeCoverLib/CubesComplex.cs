@@ -9,7 +9,7 @@ namespace CubeCoverLib
 
         public CubesComplex(ICube[] cubes)
         {
-            _cubes = cubes;
+            Cubes = cubes;
         }
 
         public bool IsCubeMax(ICube maxCube)
