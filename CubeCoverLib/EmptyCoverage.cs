@@ -50,5 +50,16 @@ namespace CubeCoverLib
         {
             throw new NotImplementedException();
         }
+
+
+        public bool IsSubCoverage(ICoverage superCov)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSuperCoverage(ICoverage subCov)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

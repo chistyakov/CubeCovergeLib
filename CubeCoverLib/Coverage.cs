@@ -130,5 +130,46 @@ namespace CubeCoverLib
             byte bitness = cubes[0].Bitness;
             return cubes.All(s => s.Bitness == bitness);
         }
+
+        public bool IsSubCoverage(ICoverage superCov)
+        {
+            if (Bitness != superCov.Bitness)
+                throw new ArgumentException();
+            return Intersection(superCov).Equals(this);
+        }
+
+        public bool IsSuperCoverage(ICoverage subCov)
+        {
+            if (Bitness != subCov.Bitness)
+                throw new ArgumentException();
+            return Intersection(subCov).Equals(subCov);
+        }
+
+        public static Coverage GetNullCoverage(ITruthTable truthTable)
+        {
+            var cubes = new ICube[GetSgnfcntCornersCnt(truthTable)];
+            for (byte i = 0, cubesI = 0; i < truthTable.GetRowCount(); i++)
+            {
+                if (!truthTable[i, truthTable.ArgCount]) continue;
+                var row = new State[truthTable.ArgCount];
+                for (byte j = 0; j < truthTable.ArgCount; j++)
+                {
+                    row[j] = truthTable[i, j];
+                }
+                cubes[cubesI] = new Cube(row);
+                cubesI++;
+            }
+            return new Coverage(cubes);
+        }
+
+        private static byte GetSgnfcntCornersCnt(ITruthTable truthTable)
+        {
+            byte sgnfcntCubeCornersCnt = 0;
+            for (byte i = 0; i < truthTable.GetRowCount(); i++)
+            {
+                if (truthTable[i, truthTable.ArgCount]) sgnfcntCubeCornersCnt++;
+            }
+            return sgnfcntCubeCornersCnt;
+        }
     }
 }

@@ -12,5 +12,7 @@
         ICube[] GetCubesByPow(byte pow);
         string ToString();
         bool Contains(ICube contCube);
+        bool IsSubCoverage(ICoverage superCov);
+        bool IsSuperCoverage(ICoverage subCov);
     }
 }

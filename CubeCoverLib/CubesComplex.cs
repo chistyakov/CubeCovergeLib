@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CubeCoverLib
@@ -24,29 +26,35 @@ namespace CubeCoverLib
 
         public static CubesComplex GetCubesComplex(ITruthTable truthTable)
         {
-            var cubes = new ICube[GetSgnfcntCornersCnt(truthTable)];
-            for (byte i = 0, cubesI = 0; i < truthTable.GetRowCount(); i++)
-            {
-                if (!truthTable[i, truthTable.ArgCount]) continue;
-                var row = new State[truthTable.ArgCount];
-                for (byte j = 0; j < truthTable.ArgCount; j++)
-                {
-                    row[j] = truthTable[i, j];
-                }
-                cubes[cubesI] = new Cube(row);
-                cubesI++;
-            }
-            return new CubesComplex(cubes);
+            return GetCubesComplex(Coverage.GetNullCoverage(truthTable));
         }
 
-        private static byte GetSgnfcntCornersCnt(ITruthTable truthTable)
+        public static CubesComplex GetCubesComplex(Coverage nullCoverage)
         {
-            byte sgnfcntCubeCornersCnt = 0;
-            for (byte i = 0; i < truthTable.GetRowCount(); i++)
+            var cubesComplex = new List<ICube>(nullCoverage.ToCubesArray());
+            var mrgdCubesPow = new List<ICube>(nullCoverage.ToCubesArray());
+            for (byte pow = 0; pow < nullCoverage.Size; pow++)
             {
-                if (truthTable[i, truthTable.ArgCount]) sgnfcntCubeCornersCnt++;
+                mrgdCubesPow = new List<ICube>(GetMergedMajorCubes(mrgdCubesPow.ToArray()));
+                if(mrgdCubesPow.Count == 0) break;
+                cubesComplex.AddRange(mrgdCubesPow);
             }
-            return sgnfcntCubeCornersCnt;
+            return new CubesComplex(cubesComplex.ToArray());
+        }
+        private static ICube[] GetMergedMajorCubes(ICube[] minorCubes)
+        {
+            var mrdCubes = new List<ICube>();
+            for (byte i = 0; i < minorCubes.Length; i++)
+            {
+                for (byte j = i; j < minorCubes.Length; j++)
+                {
+                    if (minorCubes[i].IsNeighbor(minorCubes[j]))
+                    {
+                        mrdCubes.Add(minorCubes[i].Merge(minorCubes[j]));
+                    }
+                }
+            }
+            return mrdCubes.Distinct().ToArray();
         }
     }
 }

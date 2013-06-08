@@ -20,7 +20,7 @@ namespace CubeCoverLib
 
         public byte Bitness
         {
-            get { return (byte)_stateSet.Length; }
+            get { return (byte) _stateSet.Length; }
         }
 
         public byte Power
@@ -41,8 +41,16 @@ namespace CubeCoverLib
                 return false;
             }
             // cubes distinguish by only one coord
-            var mergedCube = StatewiseMerge(neighborCube);
-            return Power + 1 == mergedCube.Power;
+            try
+            {
+                ICube mergedCube = StatewiseMerge(neighborCube);
+                return Power + 1 == mergedCube.Power;
+            }
+
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public ICube Merge(ICube neighbor)
@@ -97,7 +105,7 @@ namespace CubeCoverLib
 
         private static byte GetPower(State[] stateSet)
         {
-            return (byte)stateSet.Count(s => (s.Equals(State.X)));
+            return (byte) stateSet.Count(s => (s.Equals(State.X)));
         }
 
         private ICube StatewiseMerge(ICube addendCube)
@@ -107,7 +115,7 @@ namespace CubeCoverLib
             var tempStateSet = new State[Bitness];
             for (byte i = 0; i < Bitness; i++)
             {
-                tempStateSet[i] = _stateSet[i].Intersection(addendCube[i]);
+                tempStateSet[i] = _stateSet[i].Merge(addendCube[i]);
             }
             return new Cube(tempStateSet);
         }
@@ -187,7 +195,7 @@ namespace CubeCoverLib
 
         public override int GetHashCode()
         {
-            var hc = 0;
+            int hc = 0;
             for (byte i = 0; i < Bitness; i++)
             {
                 hc += _stateSet[i].GetHashCode();
