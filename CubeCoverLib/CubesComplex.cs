@@ -2,7 +2,7 @@
 
 namespace CubeCoverLib
 {
-    internal class CubesComplex : Coverage
+    class CubesComplex : Coverage
     {
         private ICube[] _cubes;
 
