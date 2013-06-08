@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace CubeCoverLib
 {
     public class Coverage : ICoverage
     {
-        private readonly ICube[] _cubes;
+        protected ICube[] _cubes;
 
         public Coverage() {}
 
         public Coverage(ICube[] cubes)
         {
-            _cubes = cubes;
+            _cubes = (ICube[]) cubes.Clone();
         }
 
         public ICube this[byte index]
@@ -66,6 +67,7 @@ namespace CubeCoverLib
 
         public override string ToString()
         {
+            //if (_cubes == null) return "null";
             return string.Join("\n", _cubes.Select(s => s.ToString()));
         }
     }

@@ -27,6 +27,14 @@ namespace CubeCoverLib
             if (!(obj is State)) return false;
             return _value == ((State)obj)._value;
         }
+
+        // Implicit conversion from bool to State. Maps true to State.T and
+        // false to State.F.
+        public static implicit operator State(bool x)
+        {
+            return x ? T : F;
+        }
+
         public override int GetHashCode()
         {
             return _value;
