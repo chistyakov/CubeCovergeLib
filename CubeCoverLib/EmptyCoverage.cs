@@ -6,60 +6,60 @@ namespace CubeCoverLib
     {
         public ICube this[byte index]
         {
-            get { throw new NotImplementedException(); }
+            get { throw new IndexOutOfRangeException(); }
         }
 
         public byte Size
         {
-            get { throw new NotImplementedException(); }
+            get { return 0; }
         }
 
         public byte MaxPower
         {
-            get { throw new NotImplementedException(); }
+            get { return 0; }
         }
 
         public ICube[] Intersection(ICoverage intrsctCov)
         {
-            throw new NotImplementedException();
+            return ToCubesArray();
         }
 
         public ICube[] Except(ICoverage subCov)
         {
-            throw new NotImplementedException();
+            return ToCubesArray();
         }
 
         public ICube[] GetCubesByPow(byte pow)
         {
-            throw new NotImplementedException();
+            return ToCubesArray();
         }
 
 
         public ICube[] ToCubesArray()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
 
         public byte Bitness
         {
-            get { throw new NotImplementedException(); }
+            get { return 0; }
         }
 
         public bool Contains(ICube contCube)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
 
         public bool IsSubCoverage(ICoverage superCov)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public bool IsSuperCoverage(ICoverage subCov)
         {
-            throw new NotImplementedException();
+            return subCov.GetType() == typeof(EmptyCube);
         }
     }
 }
