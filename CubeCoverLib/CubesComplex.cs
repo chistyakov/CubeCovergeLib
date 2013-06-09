@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace CubeCoverLib
@@ -17,7 +16,7 @@ namespace CubeCoverLib
 
         public bool IsCubeMax(ICube maxCube)
         {
-            throw new NotImplementedException();
+            return Cubes.Any(c => !c.Equals(maxCube) && c.IsSupercube(maxCube));
         }
 
         public Coverage GetMaxCubesCoverage()
