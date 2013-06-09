@@ -31,7 +31,7 @@ namespace CubeCoverLib
         {
             get
             {
-                if (index >= Size) throw new IndexOutOfRangeException();
+                //if (index >= Size) throw new IndexOutOfRangeException();
                 return Cubes[index];
             }
         }

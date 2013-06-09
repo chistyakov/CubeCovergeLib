@@ -81,10 +81,20 @@ namespace CubeCoverLib
         {
             get
             {
-                if (index1 < GetRowCount() && index2 < GetColCount())
-                    return _table[index1, index2];
-                throw new IndexOutOfRangeException();
+                //if (index1 < GetRowCount() && index2 < GetColCount())
+                return _table[index1, index2];
+                //throw new IndexOutOfRangeException();
             }
+        }
+
+        public byte GetColCount()
+        {
+            return (byte) (ArgCount + 1);
+        }
+
+        public byte GetRowCount()
+        {
+            return RaiseTwoToXPow(ArgCount);
         }
 
         private static bool IsPowerOfTwo(byte x, out byte pow)
@@ -189,17 +199,6 @@ namespace CubeCoverLib
             {
                 table[rowNum, colCount - 1 - i - shiftWordLeft] = wordByteSet[i];
             }
-        }
-
-
-        public byte GetColCount()
-        {
-            return (byte)(ArgCount + 1);
-        }
-
-        public byte GetRowCount()
-        {
-            return RaiseTwoToXPow(ArgCount);
         }
     }
 }
