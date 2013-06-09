@@ -134,7 +134,7 @@ namespace CubeCoverLib
 
         private static bool CompareIsSubset(ICube subCube, ICube superCube)
         {
-            if (subCube.Bitness != superCube.Bitness || superCube.Power <= subCube.Power)
+            if (subCube.Bitness != superCube.Bitness || superCube.Power < subCube.Power)
             {
                 return false;
             }

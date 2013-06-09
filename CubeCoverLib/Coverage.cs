@@ -127,6 +127,8 @@ namespace CubeCoverLib
 
         private static bool CheckBitness(ICube[] cubes)
         {
+            if (cubes.Length == 0)
+                return true;
             byte bitness = cubes[0].Bitness;
             return cubes.All(s => s.Bitness == bitness);
         }
