@@ -178,7 +178,7 @@ namespace CubeCoverLib
         public bool Equals(Cube p)
         {
             if (p == null)
-                return true;
+                return false;
             if (p.Bitness == Bitness && p.Power == Power)
             {
                 for (byte i = 0; i < Bitness; i++)
